@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_inbox"
+            android:icon="@drawable/ic_down"
+            android:title="Caixa de entrada" />
+        <item
+            android:id="@+id/nav_favoritos"
+            android:icon="@drawable/ic_star"
+            android:title="Favoritos" />
+        <item
+            android:id="@+id/nav_send_messages"
+            android:icon="@drawable/ic_send"
+            android:title="Mensagens enviadas" />
+        <item
+            android:id="@+id/nav_draft"
+            android:icon="@drawable/ic_envelope"
+            android:title="Rascunhos" />
+
+        <group android:checkableBehavior="single">
+
+            <item
+                android:id="@+id/nav_valores"
+                app:actionLayout="@layout/ac_custom_alert"
+                android:title="Valores"/>
+            <item
+                android:id="@+id/nav_contas"
+                app:actionLayout="@layout/ac_custom_alert"
+                android:title="Contas" />
+
+            <item
+                android:id="@+id/nav_invest"
+                app:actionLayout="@layout/ac_custom_alert"
+                android:title="Investimentos" />
+
+        </group>
+    </group>
+</menu>
