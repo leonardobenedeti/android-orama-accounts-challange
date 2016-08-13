@@ -1,37 +1,33 @@
-[
-  {
+{
+  "contas": [{
     "profile": 500,
     "account": "Aposentadoria",
     "reference_date": "2016-08-10",
     "balance": "97000.00",
     "retrieval": "0.00"
-  },
-  {
-    "profile": 500,
+  }, {
+    "profile": 400,
     "account": "Faculdade",
     "reference_date": "2016-08-10",
     "balance": "1000.00",
     "retrieval": "2000.00"
-  },
-  {
+  }, {
     "profile": 500,
     "account": "Filhos",
     "reference_date": "2016-08-10",
     "balance": "2560.00",
     "retrieval": "1000.00"
-  },
-  {
+  }, {
     "profile": 500,
     "account": "Carro",
     "reference_date": "2016-08-10",
     "balance": "21562.00",
     "retrieval": "0.00"
-  },
-  {
+  }, {
     "profile": 500,
     "account": "Casa",
     "reference_date": "2016-08-10",
     "balance": "2560000.00",
     "retrieval": "134000.00"
-  }
-]
+  }]
+}

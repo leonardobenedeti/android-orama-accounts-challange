@@ -8,6 +8,8 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,19 +24,34 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class ValoresFragment extends Fragment{
+
+    RecyclerView recList;
+    List<AccountsModel> accountsModelList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_valores, container, false);
 
+
+        recList = (RecyclerView) rootView.findViewById(R.id.cardList);
+        recList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(llm);
+
+
+
+
         LinearLayout chamaData = (LinearLayout) rootView.findViewById(R.id.show_date_picker);
         final TextView date = (TextView) rootView.findViewById(R.id.textView2);
-        final TextView contas = (TextView) rootView.findViewById(R.id.textView3);
+//        final TextView contas = (TextView) rootView.findViewById(R.id.textView3);
 
 
         chamaData.setOnClickListener(new View.OnClickListener() {
@@ -46,17 +63,13 @@ public class ValoresFragment extends Fragment{
                     public void onDateSet(DatePicker view, int year, int month, int day) {
                         month = month + 1;
                         date.setText("" + day + "/" + month + "/" + year);
+                        degenerateJson(loadJSONFromAsset());
                     }
                 };
                 newFragment.show(getActivity().getFragmentManager(), "datePicker");
 
-                contas.setText(loadJSONFromAsset().toString());
-
             }
         });
-
-
-
 
         return rootView;
     }
@@ -81,4 +94,41 @@ public class ValoresFragment extends Fragment{
         }
         return json;
     }
+
+
+    public void degenerateJson(String data){
+
+        try {
+            JSONObject json = new JSONObject(data);
+
+            if(!json.isNull("contas")){
+                JSONArray ja = json.getJSONArray("contas");
+                accountsModelList = new ArrayList<AccountsModel>();
+                for(int i = 0, tam = ja.length(); i < tam; i++){
+                    JSONObject jAccs = ja.getJSONObject(i);
+
+                    AccountsModel accountsModel = new AccountsModel();
+
+                    accountsModel.setAccount(jAccs.getString("account"));
+                    accountsModel.setBalance(jAccs.getString("balance"));
+                    accountsModel.setId(i);
+                    accountsModel.setProfile(jAccs.getInt("profile"));
+                    accountsModel.setReference_date(jAccs.getString("reference_date"));
+                    accountsModel.setRetrieval(jAccs.getString("retrieval"));
+
+                    accountsModelList.add(accountsModel);
+                }
+//
+//                adapter = new MyListAdapter(cartItems , MainActivity.this);
+//                listView.setAdapter(adapter);
+//
+                AccAdapter accAdapter = new AccAdapter(accountsModelList);
+                recList.setAdapter(accAdapter);
+            }
+        }
+        catch(Exception e){
+            Toast.makeText(getActivity(), "Error"+e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
 }
