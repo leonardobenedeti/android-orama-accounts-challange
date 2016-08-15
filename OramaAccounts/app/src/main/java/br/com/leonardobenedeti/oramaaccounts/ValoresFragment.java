@@ -24,6 +24,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,13 +48,17 @@ public class ValoresFragment extends Fragment{
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
-
-
-
         LinearLayout chamaData = (LinearLayout) rootView.findViewById(R.id.show_date_picker);
         final TextView date = (TextView) rootView.findViewById(R.id.textView2);
-//        final TextView contas = (TextView) rootView.findViewById(R.id.textView3);
+        final TextView all = (TextView) rootView.findViewById(R.id.todos);
 
+        all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onResume();
+                date.setText("DD MM YYYY");
+            }
+        });
 
         chamaData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,9 +67,20 @@ public class ValoresFragment extends Fragment{
                 DialogFragment newFragment = new DatePickerFragment() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int day) {
-                        month = month + 1;
-                        date.setText("" + day + "/" + month + "/" + year);
-                        degenerateJson(loadJSONFromAsset());
+
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(year, month, day);
+                        Date dateValue = calendar.getTime();
+
+
+                        SimpleDateFormat simpleDate =  new SimpleDateFormat("dd MMM yyyy");
+                        String dateText = simpleDate.format(dateValue);
+
+                        SimpleDateFormat simpleDateForJson =  new SimpleDateFormat("yyyy-MM-dd");
+                        String dateTextJson = simpleDateForJson.format(dateValue);
+
+                        date.setText(dateText);
+                        degenerateJson(loadJSONFromAsset(), dateTextJson );
                     }
                 };
                 newFragment.show(getActivity().getFragmentManager(), "datePicker");
@@ -72,11 +89,16 @@ public class ValoresFragment extends Fragment{
         });
 
         return rootView;
+
+
+
+
     }
 
-    public void showDatePickerDialog() {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getFragmentManager(), "datePicker");
+    @Override
+    public void onResume() {
+        super.onResume();
+        degenerateJson(loadJSONFromAsset(), null );
     }
 
     public String loadJSONFromAsset() {
@@ -96,7 +118,7 @@ public class ValoresFragment extends Fragment{
     }
 
 
-    public void degenerateJson(String data){
+    public void degenerateJson(String data, String date){
 
         try {
             JSONObject json = new JSONObject(data);
@@ -104,6 +126,7 @@ public class ValoresFragment extends Fragment{
             if(!json.isNull("contas")){
                 JSONArray ja = json.getJSONArray("contas");
                 accountsModelList = new ArrayList<AccountsModel>();
+
                 for(int i = 0, tam = ja.length(); i < tam; i++){
                     JSONObject jAccs = ja.getJSONObject(i);
 
@@ -116,12 +139,13 @@ public class ValoresFragment extends Fragment{
                     accountsModel.setReference_date(jAccs.getString("reference_date"));
                     accountsModel.setRetrieval(jAccs.getString("retrieval"));
 
-                    accountsModelList.add(accountsModel);
+                    if (date!= null && accountsModel.getReference_date().equals(date)) {
+                        accountsModelList.add(accountsModel);
+                    }else if(date==null){
+                        accountsModelList.add(accountsModel);
+                    }
                 }
-//
-//                adapter = new MyListAdapter(cartItems , MainActivity.this);
-//                listView.setAdapter(adapter);
-//
+
                 AccAdapter accAdapter = new AccAdapter(accountsModelList);
                 recList.setAdapter(accAdapter);
             }

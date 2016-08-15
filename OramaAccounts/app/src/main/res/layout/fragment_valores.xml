@@ -30,38 +30,53 @@
                     />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:id="@+id/show_date_picker"
                     >
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         >
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="DD/MM/YYYY"
+                            android:text="DD MM YYYY"
                             android:id="@+id/textView2" />
 
                         <ImageView
                             android:layout_width="wrap_content"
-                            android:layout_height="10dp"
+                            android:layout_height="6dp"
+                            android:layout_marginTop="2dp"
                             android:src="@drawable/ic_arrow_down"
 
                             />
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="#ededed"/>
+
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/todos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Todas"
+                    />
+
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/cardList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/darker_gray"
+                android:background="#ededed"
                 />
         </LinearLayout>
 </RelativeLayout>

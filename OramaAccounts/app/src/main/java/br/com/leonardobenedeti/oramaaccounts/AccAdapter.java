@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
 
 /**
@@ -35,10 +37,17 @@ public class AccAdapter extends RecyclerView.Adapter<AccAdapter.AccViewHolder> {
             accViewHolder.profile.setImageResource(R.drawable.ic_coqueiro);
         }
 
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(',');
+        DecimalFormat decimalFormat = new DecimalFormat("R$ #,#00.00", symbols);
+
+
         accViewHolder.vAccTitle.setText(acc.getAccount());
-        accViewHolder.vBalance.setText(acc.getBalance());
-        accViewHolder.vRetrieval.setText(acc.getRetrieval());
-        accViewHolder.vTotal.setText(String.valueOf(Float.parseFloat(acc.getBalance()) - Float.parseFloat(acc.getRetrieval())));
+        accViewHolder.vBalance.setText(decimalFormat.format(Float.parseFloat(acc.getBalance())));
+        accViewHolder.vRetrieval.setText(decimalFormat.format(Float.parseFloat(acc.getRetrieval())));
+        accViewHolder.vTotal.setText(decimalFormat.format(
+                Float.parseFloat(acc.getBalance()) - Float.parseFloat(acc.getRetrieval())));
     }
 
     @Override
